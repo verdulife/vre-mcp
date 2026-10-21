@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visual-reference-engine"
+version = "0.1.0"
+description = "Local MCP server that finds, evaluates, presents and stores real visual references for design work."
+requires-python = ">=3.11"
+dependencies = [
+  "mcp>=1.27.0",
+  "httpx>=0.28",
+  "beautifulsoup4>=4.12",
+  "pillow>=10.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+vre-mcp = "visual_reference.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

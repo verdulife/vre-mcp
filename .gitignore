@@ -1,0 +1,18 @@
+# Local data, caches and logs
+data/*
+!data/.gitkeep
+.cache/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+
+# Local overrides and secrets
+visual-reference.local.toml
+.env
