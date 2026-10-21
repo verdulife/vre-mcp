@@ -122,13 +122,13 @@ credentials.
 
 ## The skill
 
-`visual-reference-workflow` lives at `.agents/skills/visual-reference-workflow/SKILL.md`,
+`vre-workflow` lives at `.agents/skills/vre-workflow/SKILL.md`,
 which Pi discovers from the project root (and therefore also requires project trust). For a
 global install:
 
 ```bash
 mkdir -p ~/.agents/skills
-cp -r .agents/skills/visual-reference-workflow ~/.agents/skills/
+cp -r .agents/skills/vre-workflow ~/.agents/skills/
 ```
 
 The skill encodes when a search is worth doing, how to keep verified facts, visual
@@ -263,7 +263,7 @@ src/vre/
   evaluation/            metadata scoring, diversity selection
   workflow/              sessions, presentation, refinement
   storage/               SQLite schema and repositories
-.agents/skills/visual-reference-workflow/SKILL.md
+.agents/skills/vre-workflow/SKILL.md
 scripts/                 run_server, e2e_probe, e2e_flow, e2e_persist
 tests/                   offline unittest suite
 odd/tasks/               feature document with specs, tasks and evidence log

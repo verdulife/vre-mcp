@@ -154,3 +154,8 @@ L7 (project rename to VRE):
   and the skill name `visual-reference-workflow` (the workflow's name, not the project's).
 - Verified after the rename: 62 tests OK; `scripts/e2e_probe.py` reports `server: vre` with 9 tools and a real
   image block; a nested Pi session lists `mcp__vre__engine_status` ... `mcp__vre__list_projects`.
+
+L8 (skill rename, user preference):
+- The skill is now `vre-workflow` at `.agents/skills/vre-workflow/SKILL.md`; README and
+  `tests/test_assets.py` follow. `pi mcp list` reports `vre: connected, 9 tools (direct, project)`
+  after the user trusted the project and restarted Pi.

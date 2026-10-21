@@ -34,14 +34,14 @@ class ConfigAssetTests(unittest.TestCase):
 
 class SkillAssetTests(unittest.TestCase):
     def setUp(self):
-        self.path = ROOT / ".agents" / "skills" / "visual-reference-workflow" / "SKILL.md"
+        self.path = ROOT / ".agents" / "skills" / "vre-workflow" / "SKILL.md"
         self.text = self.path.read_text(encoding="utf-8")
 
     def test_frontmatter_has_name_and_routing_description(self):
         match = re.match(r"^---\n(?P<body>.*?)\n---\n", self.text, re.DOTALL)
         self.assertIsNotNone(match, "SKILL.md must start with frontmatter")
         body = match.group("body")
-        self.assertIn("name: visual-reference-workflow", body)
+        self.assertIn("name: vre-workflow", body)
         description = re.search(r"description: \"?(.*?)\"?\n", body)
         assert description is not None
         self.assertIn("Trigger:", description.group(1))
