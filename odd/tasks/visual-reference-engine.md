@@ -132,3 +132,15 @@ L5 (Phases 2-3 evidence, real runs):
   URL now; transient "No search provider available" from the keyless provider -> one bounded retry.
 - Observed but not over-claimed: many pages expose only an Open Graph **social card**, which may be a
   presentation graphic around the artwork; the payload labels it `social_card` and warns.
+
+L6 (T7 close-out):
+- Offline suite: 62 tests, green twice (`python -m unittest discover -s tests -t .`). A delegated
+  worker fixed 4 implementation defects found by the tests: provider-name regex swallowed the answer
+  paragraph; noise-URL regex over- and under-matched; `<img>` fallback recorded markup sizes as
+  measured dimensions; limitation wording did not name the actual reason. No test was weakened.
+- Verified again after those fixes with the live flow: 6 usable candidates, provider `exa`, 4 diverse
+  picks, `fetch_reference_image` returning `['text','image']`.
+- Work-unit commits on `feature/visual-reference-engine`; each commit was checked out into a scratch
+  directory from its own tree and its suite run there: all 8 commits green.
+- Unresolved for the human: `.pi/mcp.json` stays ignored until the project is trusted, so a normal
+  interactive Pi session must approve trust (or the server must be registered with `pi mcp add`).
