@@ -221,3 +221,12 @@ L14 (hybrid direction confirmed: "ok dale"):
   criteria, and the four inputs still missing (logo SVG, back copy, back finish, print budget).
 - Both decompositions now point to the chosen direction instead of competing as alternatives.
 - No code change; 82 tests unaffected.
+
+L15 (session close):
+- State: feature branch `feature/vre`, working tree clean, 82 offline tests green.
+- Delivered: MCP server (9 tools + `save_reference_images`), `vre-workflow` skill, README with real evidence,
+  presentations that attach images and emit the Imagen | Descripción | Valoración table, SSRF guards,
+  SQLite library, and the business-card reference work (saved `ref_bd57832e6b`, hybrid spec 00 + decompositions 01/02).
+- Open, waiting on the user (not blockers of code): logo SVG, exact back-side copy, back finish, print budget.
+  Until those arrive the FigCraft build is not started on purpose.
+- Memory: session summary saved to Engram (project `vre-mcp`).
