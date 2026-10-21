@@ -173,3 +173,14 @@ L9 (user-reported defect: "it returns the page URL, not the image"):
   images 148/92/36/18 KB, note "2 candidate(s) were left out because the verified image is too small to judge".
   70 offline tests green. The live session needed a server reconnect to load the new code (a
   long-lived stdio child does not reload on its own).
+
+L10 (user cannot see MCP image blocks):
+- Added `save_reference_images(candidate_ids|reference_ids, folder)`: downloads the original bytes
+  through the SSRF-safe fetcher, verifies them with PIL, writes
+  `data/references/<safe folder>/NN-<slug>.<ext>`, merges `index.json` by image URL, never
+  overwrites, and reports per-item errors. Unsafe folder names, unknown ids and empty requests raise.
+- Verified in a fresh server process with the four business-card candidates: 4 files
+  (1500x1000, 1200x630, 1536x1024, 1500x1000), `errors: []`, and `folder="../evil"` refused.
+  81 offline tests green (+11).
+- Documentation states the two always-available channels: direct `image_url` and local files; saving
+  is the user's explicit authorization, matching spec section 9.

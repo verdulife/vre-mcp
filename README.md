@@ -118,7 +118,23 @@ credentials.
 | `fetch_reference_image` | Returns the real image as an MCP image block (candidate, saved reference or explicit URL). |
 | `save_references` | Stores the chosen references and their compact cards; URLs only, no image copies. |
 | `get_project_references` | Compact cards for a project; images stay on demand. |
+| `save_reference_images` | Writes the original image bytes of chosen candidates or saved references into `data/references/<folder>/`, keeps a merging `index.json`, and returns absolute paths plus the direct image URLs. Refuses unsafe folder names; one failing image does not abort the rest. |
 | `list_projects` | Local projects with reference counts. |
+
+## When the client cannot display images
+
+Some clients do not render MCP image blocks, so the user sees metadata but no pictures. Two things
+always work, and the agent should offer both:
+
+1. **Direct image URL**: every candidate carries `image_url` (a verified image resource, checked by
+   decoding it) next to `page_url`. Give both; the first is the picture, the second is the source.
+2. **Files on disk**: `save_reference_images(candidate_ids=[...], folder="tarjetas-visita")` writes
+   `data/references/tarjetas-visita/01-<slug>.jpg` and an `index.json` with file, image URL, page URL,
+   dimensions and size, then returns absolute paths. Folder names are single safe segments: no
+   absolute paths, `..`, separators or spaces.
+
+Saving is an explicit user decision, not an automatic side effect: the specification allows copying
+image bytes only with permission, and the tool call is that permission.
 
 ## The skill
 
@@ -178,6 +194,10 @@ python scripts/e2e_persist.py               # save, restart, read, fetch by refe
 
 After the rename to VRE the same probe and a Pi session confirm the server name and tool prefix:
 `server: vre`, tools `mcp__vre__engine_status` ... `mcp__vre__list_projects`.
+
+`save_reference_images` on four candidates wrote
+`data/references/tarjetas-visita-mcp/01..04-*.jpg|png` (1500x1000, 1200x630, 1536x1024, 1500x1000)
+with `errors: []`, and refused `folder="../evil"` with an error.
 
 `present_reference_set` with a fresh server process (the live session keeps the old server until it
 reconnects): blocks `['text','text','image','text','image','text','image','text','image']` — the JSON

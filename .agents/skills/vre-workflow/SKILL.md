@@ -74,9 +74,14 @@ call `fetch_reference_image(candidate_id=...)`. Look at the pixels first, then w
 `attach_images=false` only for a cheap listing you will not describe visually, and then call
 `fetch_reference_image` first.
 
-Per reference: the image, title and source, link to the original page, one concrete contribution,
-one visual decision worth exploring, and any caution (unverified authorship, social card, expiring
-URL, low resolution). Keep it short: the user needs to compare directions, not read a report.
+Per reference: the image, title and source, link to the original page, **the direct image URL**, one
+concrete contribution, one visual decision worth exploring, and any caution (unverified authorship,
+social card, expiring URL, low resolution). Keep it short: the user needs to compare directions, not
+read a report.
+
+Never assume the user sees an image because the model received it. If they say they cannot see the
+images, or the client renders text only, give the direct `image_url` for each reference and offer
+`save_reference_images` to write the files locally; then return the absolute paths and the folder.
 If the payload says some candidates were left out because the verified image is too small, say so;
 do not describe an image the server refused to attach.
 

@@ -9,19 +9,25 @@ Tools, in the order the agent should use them:
   refine_search          - same / narrow / explore from the same briefing
   fetch_reference_image  - hand a real image to the model as an MCP image block
   save_references        - persist only what the user chose
+  save_reference_images  - write those images as real files, only when the user asked for files
   get_project_references - compact cards for the active project
   list_projects          - what exists locally
 """
 
 from __future__ import annotations
 
+import io
 import json
+import re
 import sys
+import unicodedata
 from collections import OrderedDict
+from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.fastmcp.exceptions import ToolError
 from mcp.server.fastmcp.utilities.types import Image
+from PIL import Image as PILImage
 
 from . import __version__
 from .config import Config, load_config, resolve_database_path
@@ -29,7 +35,7 @@ from .discovery.image_probe import prepare_for_model
 from .discovery.orchestrator import DiscoveryRequest, discover_references
 from .evaluation.scoring import evaluation_record
 from .http_safety import FetchError, fetch_image_bytes
-from .models import Candidate, SearchOutcome
+from .models import Candidate, SearchOutcome, utc_now
 from .sources.pi_web_access import PiWebAccessAdapter
 from .storage import Database, Repository
 from .workflow.present import evaluate_session, present_session
@@ -89,6 +95,87 @@ def reset_state() -> None:
 
 def _json(payload: dict | list) -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+_FOLDER_SEGMENT = re.compile(r"^[A-Za-z0-9._-]+$")
+_SLUG_SEPARATORS = re.compile(r"[^a-z0-9]+")
+
+
+def _slugify(value: str, fallback: str = "reference", limit: int = 60) -> str:
+    """Lowercase ASCII slug usable as one file or folder name segment."""
+    ascii_text = unicodedata.normalize("NFKD", value or "").encode("ascii", "ignore").decode("ascii")
+    slug = _SLUG_SEPARATORS.sub("-", ascii_text.lower()).strip("-")
+    return slug[:limit].strip("-") or fallback
+
+
+def _safe_folder_name(value: str) -> str:
+    """Validate one optional folder segment, refusing anything that could escape the root."""
+    name = (value or "").strip()
+    if not name:
+        raise ToolError("folder must not be empty; omit it to use the default folder.")
+    if Path(name).is_absolute() or name.startswith(("/", "\\")):
+        raise ToolError(f"folder must be a relative name, not an absolute path: {value!r}.")
+    if name in {".", ".."} or ".." in name or not _FOLDER_SEGMENT.fullmatch(name):
+        raise ToolError(
+            f"folder {value!r} is not a safe single path segment: use only letters, digits, "
+            "'.', '_' and '-', with no path separator."
+        )
+    return name
+
+
+def _image_shape(data: bytes) -> tuple[int, int, str]:
+    """Real pixel size and extension from the bytes themselves, never from headers."""
+    try:
+        with PILImage.open(io.BytesIO(data)) as image:
+            width, height = image.size
+            image_format = image.format
+    except (OSError, ValueError) as exc:
+        raise FetchError(f"Downloaded bytes are not a decodable image: {exc}") from exc
+    extension = "jpg" if image_format == "JPEG" else (image_format or "img").lower()
+    return width, height, extension
+
+
+def _unique_path(folder: Path, stem: str, extension: str) -> Path:
+    """Never overwrite: `stem.ext`, then `stem-2.ext`, `stem-3.ext`, and so on."""
+    target = folder / f"{stem}.{extension}"
+    counter = 2
+    while target.exists():
+        target = folder / f"{stem}-{counter}.{extension}"
+        counter += 1
+    return target
+
+
+def _write_image_index(folder: Path, entries: list[dict]) -> None:
+    """Merge into `index.json`: replace the same image_url, keep the other entries."""
+    path = folder / "index.json"
+    existing: list[dict] = []
+    if path.is_file():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = {}
+        if isinstance(payload, dict) and isinstance(payload.get("references"), list):
+            existing = [item for item in payload["references"] if isinstance(item, dict)]
+    merged = list(existing)
+    for entry in entries:
+        for position, current in enumerate(merged):
+            if current.get("image_url") == entry["image_url"]:
+                merged[position] = entry
+                break
+        else:
+            merged.append(entry)
+    path.write_text(
+        json.dumps({"updated_at": utc_now(), "references": merged}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def _session_project_name(session: SearchSession | None) -> str | None:
+    """Project name behind a candidate's session, when the session belongs to one."""
+    if session is None or not session.project_id:
+        return None
+    project = get_repository().get_project(project_id=session.project_id)
+    return project["name"] if project else None
 
 
 def _remember(outcome: SearchOutcome) -> None:
@@ -550,6 +637,131 @@ async def save_references(
             "saved": saved,
             "count": len(saved),
             "image_policy": "URLs only; no image file was copied locally.",
+        }
+    )
+
+
+@mcp.tool()
+async def save_reference_images(
+    candidate_ids: list[str] | None = None,
+    reference_ids: list[str] | None = None,
+    folder: str | None = None,
+) -> str:
+    """Write the original image files of chosen references into the local project.
+
+    This call writes image files to disk under `data/references/`, so it must be called only
+    when the user asked for files or cannot see the images returned by the other tools. No
+    other tool downloads an image file.
+
+    Args:
+        candidate_ids: Candidates returned by `search_references` or `refine_search`.
+        reference_ids: References saved with `save_references`.
+        folder: Optional single folder name under `data/references/`; defaults to a slug of the
+            project name, or `references` when no project is known.
+    """
+    if not candidate_ids and not reference_ids:
+        raise ToolError("Provide candidate_ids or reference_ids.")
+
+    config = get_config()
+    repository = get_repository()
+    items: list[dict] = []
+    unknown: list[str] = []
+    for candidate_id in candidate_ids or []:
+        try:
+            session, candidate = _candidate(str(candidate_id))
+        except ToolError:
+            unknown.append(str(candidate_id))
+            continue
+        items.append(
+            {
+                "id": str(candidate_id),
+                "image_url": candidate.image_url,
+                "page_url": candidate.page_url,
+                "title": candidate.title,
+                "project_name": _session_project_name(session),
+            }
+        )
+    for reference_id in reference_ids or []:
+        saved = repository.get_reference(str(reference_id))
+        if saved is None:
+            unknown.append(str(reference_id))
+            continue
+        items.append(
+            {
+                "id": str(reference_id),
+                "image_url": saved.image_url,
+                "page_url": saved.page_url,
+                "title": saved.title,
+                "project_name": None,
+            }
+        )
+    if unknown:
+        raise ToolError(
+            f"Unknown id(s): {', '.join(unknown)}. Nothing was written; use ids returned by "
+            "`search_references` or `save_references`."
+        )
+
+    if folder is not None:
+        segment = _safe_folder_name(folder)
+    else:
+        project_name = next((item["project_name"] for item in items if item["project_name"]), None)
+        segment = _slugify(project_name, fallback="references") if project_name else "references"
+    root = Path(config.root) / "data" / "references" / segment
+    root.mkdir(parents=True, exist_ok=True)
+
+    entries: list[dict] = []
+    errors: list[dict] = []
+    for index, item in enumerate(items, start=1):
+        url = item["image_url"]
+        if not url:
+            errors.append({"id": item["id"], "error": "This reference has no verified image URL."})
+            continue
+        try:
+            resource = await fetch_image_bytes(
+                url, config.http, max_bytes=config.vision.max_image_bytes
+            )
+            width, height, extension = _image_shape(resource.content)
+        except FetchError as exc:
+            errors.append({"id": item["id"], "error": str(exc)})
+            continue
+        stem = f"{index:02d}-{_slugify(item['title'], fallback='reference', limit=40)}"
+        target = _unique_path(root, stem, extension)
+        try:
+            target.write_bytes(resource.content)
+        except OSError as exc:
+            errors.append({"id": item["id"], "error": f"Could not write {target}: {exc}"})
+            continue
+        entries.append(
+            {
+                "file": str(target.resolve()),
+                "image_url": url,
+                "page_url": item["page_url"],
+                "title": item["title"],
+                "width": width,
+                "height": height,
+                "bytes": len(resource.content),
+                "saved_at": utc_now(),
+            }
+        )
+
+    _write_image_index(root, entries)
+    reported = [
+        {
+            key: entry[key]
+            for key in ("file", "image_url", "page_url", "title", "width", "height", "bytes")
+        }
+        for entry in entries
+    ]
+    return _json(
+        {
+            "folder": str(root.resolve()),
+            "saved": reported,
+            "count": len(reported),
+            "errors": errors,
+            "note": (
+                "Files are copies of the original images for the user's own review; "
+                "respect the source's licensing."
+            ),
         }
     )
 
