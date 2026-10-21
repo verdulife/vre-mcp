@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "visual-reference": {
+      "command": "python",
+      "args": ["C:/Users/verdu/vre-mcp/scripts/run_server.py"],
+      "cwd": "C:/Users/verdu/vre-mcp",
+      "exposure": "direct",
+      "timeout": 180,
+      "description": "Find, fetch, evaluate and store real visual references for design work."
+    }
+  }
+}
