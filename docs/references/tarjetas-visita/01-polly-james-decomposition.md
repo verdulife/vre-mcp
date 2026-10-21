@@ -5,6 +5,7 @@
 - **Imagen analizada**: `https://images.squarespace-cdn.com/content/615afc37a1a29b0da532c7c7/fd49bb6a-f1ab-4760-8a82-2fbc8a9485a1/20240906-IMG_0702.jpg?format=1500w&content-type=image%2Fjpeg`
 - **Archivo local**: `data/references/tarjetas-visita-mcp/01-polly-james-blind-embossed-business-card.jpg`
 - **Destino**: comparación con `02-improve-all-ways-decomposition.md` antes de reconstruir
+- **Dirección elegida**: híbrido con esta referencia como base del anverso → `00-hybrid-card-spec.md`
 
 Etiquetas: **[OBS]** visto en la imagen · **[INF]** inferencia mía · **[FALTA]** dato que la imagen no puede dar.
 

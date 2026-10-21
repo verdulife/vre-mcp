@@ -5,6 +5,7 @@
 - **Imagen analizada**: `https://images.squarespace-cdn.com/content/615afc37a1a29b0da532c7c7/1726587410831-S44RD9AL3XZLXSDBOA6K/20240913-IMG_0793.jpg?format=1500w&content-type=image%2Fjpeg`
 - **Archivo local**: `data/references/tarjetas-visita-mcp/04-blind-embossed-letterpress-printed-busin.jpg`
 - **Destino**: reconstrucción en FigCraft (aproximación en pantalla; el relieve real es de imprenta)
+- **Dirección elegida**: híbrido; se toma de esta referencia la idea de una sola línea con espacio negativo → `00-hybrid-card-spec.md`
 
 Etiquetas usadas: **[OBS]** visto en la imagen · **[INF]** inferencia mía · **[FALTA]** dato que la imagen no puede dar.
 

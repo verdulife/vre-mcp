@@ -213,3 +213,11 @@ L13 (user chose and asked to save + proceed):
 - Added `01-polly-james-decomposition.md` for comparison, same schema, including an explicit
   comparison table and a labelled recommendation (hybrid: logo deboss on the front, role line on the back).
 - No code change; 82 tests unaffected.
+
+L14 (hybrid direction confirmed: "ok dale"):
+- Wrote `docs/references/tarjetas-visita/00-hybrid-card-spec.md`: front = logo in blind emboss only;
+  back = one letterspaced line (role · domain · city); 85x55 mm, 1004x650 px frame, 3 mm bleed,
+  FigCraft variables/styles/components and emboss approximation, print handoff caveat, acceptance
+  criteria, and the four inputs still missing (logo SVG, back copy, back finish, print budget).
+- Both decompositions now point to the chosen direction instead of competing as alternatives.
+- No code change; 82 tests unaffected.
