@@ -184,3 +184,12 @@ L10 (user cannot see MCP image blocks):
   81 offline tests green (+11).
 - Documentation states the two always-available channels: direct `image_url` and local files; saving
   is the user's explicit authorization, matching spec section 9.
+
+L11 (presentation format defect: user asked for one table, always):
+- `present_reference_set` now returns `presentation_format`, `presentation_table` (rows with
+  `image_link` = `[Ver imagen](<image_url>)`, `page_link`, `description` seed, `valuation` n/5 with
+  `valuation_basis: metadata`) and a ready `table_markdown` with the three columns
+  Imagen | Descripción | Valoración. Pipes in titles are escaped.
+- Skill and README state the contract: always close with that table, first column a clickable link,
+  description with the linked title, valuation as n/5 plus one reason, agent judgement labelled.
+- 82 offline tests green, including the new table-row test.

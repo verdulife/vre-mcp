@@ -103,6 +103,23 @@ class DiversityTests(unittest.TestCase):
         self.assertIn("fetch_reference_image", item["verify_visually"])
         self.assertTrue(any("No visual" in limit for limit in item["cautions"]))
 
+    def test_table_rows_are_ready_to_present(self):
+        session = _session([
+            make_candidate("x", title="Polly James | blind emboss"),
+            make_candidate("y", discovery="img", title="Grid poster"),
+        ])
+        payload = present_session(session, limit=3, weights=None, present_min=3, present_max=5)
+        rows = payload["presentation_table"]
+        self.assertEqual(len(rows), payload["count"])
+        first = rows[0]
+        self.assertEqual(first["image_link"], f"[Ver imagen]({first['image_url']})")
+        self.assertRegex(first["valuation"], r"^\d\.\d/5$")
+        self.assertIn("Imagen | Descripción | Valoración", payload["table_markdown"])
+        self.assertEqual(len(payload["table_markdown"].splitlines()), len(rows) + 2)
+        piped = [row for row in rows if row["candidate_id"] == "x"][0]
+        self.assertIn("Polly James \\| blind emboss", piped["description"])
+        self.assertEqual(first["candidate_id"], payload["presentation"][0]["candidate_id"])
+
     def test_empty_pool_says_so(self):
         session = _session([])
         payload = present_session(session, limit=5, weights=None, present_min=3, present_max=5)

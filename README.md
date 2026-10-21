@@ -121,6 +121,20 @@ credentials.
 | `save_reference_images` | Writes the original image bytes of chosen candidates or saved references into `data/references/<folder>/`, keeps a merging `index.json`, and returns absolute paths plus the direct image URLs. Refuses unsafe folder names; one failing image does not abort the rest. |
 | `list_projects` | Local projects with reference counts. |
 
+## Presentation contract
+
+Every reference answer ends with one Markdown table, exactly three columns, and `present_reference_set`
+now ships the rows ready to use (`presentation_table` + `table_markdown`):
+
+| Imagen | Descripción | Valoración |
+| --- | --- | --- |
+| [Ver imagen](https://example.test/poster.jpg) | [Project title](https://example.test/page) — what the piece is and what it contributes, one or two lines | 4.1/5 — short reason |
+
+The first column is always a clickable `Ver imagen` link to the direct image URL, so a client that
+never renders image blocks still gives the user a way to open the picture. The valuation seed comes
+from metadata; after the agent views the image, its own judgement replaces the seed and is labelled
+as such.
+
 ## When the client cannot display images
 
 Some clients do not render MCP image blocks, so the user sees metadata but no pictures. Two things

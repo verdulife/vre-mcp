@@ -96,6 +96,46 @@ def _cautions(candidate: Candidate, score: Score) -> list[str]:
     return list(dict.fromkeys(cautions))
 
 
+def _escape_cell(text: str) -> str:
+    return (text or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
+def _table_rows(items: list[dict]) -> list[dict]:
+    """Ready-to-present rows: clickable image link, short description, valuation.
+
+    The description and the valuation are seeds built from verified facts; the agent replaces
+    them with what it actually saw and labels that as its own observation.
+    """
+    rows: list[dict] = []
+    for index, item in enumerate(items, start=1):
+        seed_parts = [item["title"]]
+        if item.get("image_role") == "social_card":
+            seed_parts.append("(page social card)")
+        observations = item.get("measured_observations") or []
+        if observations:
+            seed_parts.append(observations[0])
+        rows.append(
+            {
+                "n": index,
+                "image_link": f"[Ver imagen]({item['image_url']})",
+                "image_url": item["image_url"],
+                "page_link": f"[{_escape_cell(item['title'])}]({item['page_url']})",
+                "description": _escape_cell(". ".join(part for part in seed_parts if part)),
+                "valuation": f"{item['scores']['overall']:.1f}/5",
+                "valuation_basis": "metadata",
+                "candidate_id": item["candidate_id"],
+            }
+        )
+    return rows
+
+
+def _table_markdown(rows: list[dict]) -> str:
+    lines = ["| Imagen | Descripción | Valoración |", "| --- | --- | --- |"]
+    for row in rows:
+        lines.append(f"| {row['image_link']} | {row['description']} | {row['valuation']} |")
+    return "\n".join(lines)
+
+
 def build_presentation(
     session: SearchSession,
     picks: list[DiversePick],
@@ -145,11 +185,21 @@ def build_presentation(
             f"{len(items)} instead of filling {requested_limit}."
         )
 
+    table_rows = _table_rows(items)
     return {
         "search_id": session.search_id,
         "brief": session.brief,
         "queries": session.queries,
         "method": METHOD,
+        "presentation_format": (
+            "Always answer with a Markdown table with exactly these columns: Imagen | Descripción | "
+            "Valoración. First column: a clickable `Ver imagen` link to the image URL (no embedded "
+            "image needed). Description: one or two lines, the piece and what it contributes, with the "
+            "page title linked. Valuation: n/5 plus one short reason; label your own visual observation "
+            "as yours and keep it out of the metadata claim."
+        ),
+        "presentation_table": table_rows,
+        "table_markdown": _table_markdown(table_rows),
         "selection_rule": (
             "Greedy MMR-style ranking: 70% metadata score, 30% measured distance to the closest already "
             "chosen image. Distances below 0.12 are treated as the same direction."

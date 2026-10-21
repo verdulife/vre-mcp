@@ -87,6 +87,25 @@ do not describe an image the server refused to attach.
 
 Close with a natural question: choose some, refine, or explore another direction.
 
+### 5b. Always deliver the table
+
+Close every reference answer with one Markdown table, with exactly these three columns:
+
+```
+| Imagen | Descripción | Valoración |
+| --- | --- | --- |
+| [Ver imagen](<direct image url>) | [Título](<page url>) — qué es y qué aporta, 1–2 líneas | 4.1/5 — motivo breve |
+```
+
+- **Imagen**: a clickable `Ver imagen` link to `image_url`. The image does not need to be embedded;
+  the link must always be there, because some clients never render image blocks.
+- **Descripción**: the piece and its concrete contribution, with the title linked to the page. Never
+  write what you did not see; keep facts and your observation distinguishable.
+- **Valoración**: `n/5` plus one short reason. `present_reference_set` gives you a metadata seed in
+  `presentation_table` and `table_markdown`; replace it with your own judgement after viewing the
+  image and label that judgement as yours.
+- If the user cannot see images, add the saved folder paths and the direct links below the table.
+
 ### 6. Refine
 
 `refine_search(search_id=..., mode=..., instruction=...)`:
