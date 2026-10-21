@@ -1,4 +1,4 @@
-# Visual Reference Engine (MVP)
+# VRE — Visual Reference Engine (MVP)
 
 A local MCP server plus a Pi skill that turns a design brief into real, traceable visual
 references: it searches the web, verifies that each candidate page really declares an image,
@@ -45,7 +45,7 @@ Python packages already present in this machine's interpreter: `mcp` 1.27, `http
 ## Install
 
 ```bash
-cd /path/to/vre-mcp
+cd vre-mcp
 python -m pip install -e .        # provides the `vre-mcp` command
 ```
 
@@ -62,7 +62,7 @@ The repository ships a project-level configuration at `.pi/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "visual-reference": {
+    "vre": {
       "command": "python",
       "args": ["C:/Users/verdu/vre-mcp/scripts/run_server.py"],
       "cwd": "C:/Users/verdu/vre-mcp",
@@ -80,18 +80,18 @@ an interactive session (`--approve` grants it for one run). Adjust the absolute 
 For a user-level installation instead:
 
 ```bash
-pi mcp add visual-reference --env VRE_CONFIG=/abs/path/visual-reference.toml -- \
+pi mcp add vre --env VRE_CONFIG=/abs/path/vre.toml -- \
   python /abs/path/vre-mcp/scripts/run_server.py
-pi mcp list      # expect: visual-reference: connected, 9 tools
+pi mcp list      # expect: vre: connected, 9 tools
 ```
 
-In a session, the tools appear as `mcp__visual_reference__<tool>` (the server name is
+In a session, the tools appear as `mcp__vre__<tool>` (the server name is
 normalised: `-` becomes `_`). With `exposure: "direct"` the model can call them directly and
 Pi relays image blocks from their results.
 
 ## Configuration
 
-Copy `visual-reference.toml.example` to `visual-reference.toml` (or point `VRE_CONFIG` at it).
+Copy `vre.toml.example` to `vre.toml` (or point `VRE_CONFIG` at it).
 Every value has a working default, so the server also starts with no file at all.
 
 Environment overrides:
@@ -162,9 +162,12 @@ python scripts/e2e_persist.py               # save, restart, read, fetch by refe
 `python scripts/e2e_probe.py`:
 
 ```text
-[1] server: visual_reference 1.27.0
-    tools: ['engine_status', 'search_references', 'fetch_reference_image']
-[2] engine_status sources: {"pi_web_access": {"enabled": true, "available": true, "detail": null}}
+[1] server: vre 1.27.0
+    tools: ['engine_status', 'search_references', 'evaluate_references', 'present_reference_set',
+            'refine_search', 'fetch_reference_image', 'save_references',
+            'get_project_references', 'list_projects']
+[2] engine_status sources: {"pi_web_access": {"enabled": true, "available": true, "detail": null,
+                            "reuses": "pi-web-access MCP server over stdio, with its own credentials and quotas"}}
 [3] search_references ... candidates: 6 (usable: 6)
 [4] fetch_reference_image candidate_id=cand_492f4861d024
     content blocks: ['text', 'image']
@@ -173,10 +176,13 @@ python scripts/e2e_persist.py               # save, restart, read, fetch by refe
     isError=True message=Refused URL pointing at a private address: https://127.0.0.1:9/blocked.jpg
 ```
 
+After the rename to VRE the same probe and a Pi session confirm the server name and tool prefix:
+`server: vre`, tools `mcp__vre__engine_status` ... `mcp__vre__list_projects`.
+
 Full Pi relay, nested headless run with project trust for that run only:
 
 ```bash
-pi -p --approve --tools 'read,mcp__visual_reference__*' --no-session \
+pi -p --approve --tools 'read,mcp__vre__*' --no-session \
   "Llama a search_references ... Después llama a fetch_reference_image ... dime un detalle ..."
 ```
 
@@ -201,7 +207,7 @@ Persistence across processes (`python scripts/e2e_persist.py`):
    environment and DuckDuckGo's HTML endpoint is refused here (HTTP 202 challenge page). The
    installed package already has a working, credential-owning search (`exa`). The adapter
    launches its MCP server as a child process and parses its `Sources` block. A different
-   source can be added as another module in `src/visual_reference/sources/`; nothing else
+   source can be added as another module in `src/vre/sources/`; nothing else
    changes.
 2. **Images: URL + metadata by default.** Nothing is copied or archived. The only bytes that
    move are the downscaled image handed to the model, capped at 1024 px and 8 MB.
@@ -246,7 +252,7 @@ allows it.
 ## Layout
 
 ```text
-src/visual_reference/
+src/vre/
   server.py              MCP tools
   config.py              TOML + environment
   models.py              candidates, images, outcomes

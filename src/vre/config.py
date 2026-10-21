@@ -11,7 +11,7 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-DEFAULT_CONFIG_PATHS = ("visual-reference.toml", "visual-reference.toml.example")
+DEFAULT_CONFIG_PATHS = ("vre.toml", "vre.toml.example")
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,7 @@ class VisionConfig:
 
 @dataclass(frozen=True)
 class StorageConfig:
-    database_path: str = "data/library.sqlite"
+    database_path: str = "data/vre.sqlite"
 
 
 @dataclass(frozen=True)
@@ -50,7 +50,7 @@ class HttpConfig:
     timeout_seconds: float = 20.0
     max_response_bytes: int = 3_000_000
     max_redirects: int = 3
-    user_agent: str = "visual-reference-engine/0.1 (+local MCP server)"
+    user_agent: str = "vre/0.1 (+local MCP server)"
 
 
 @dataclass(frozen=True)

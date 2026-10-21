@@ -3,7 +3,7 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "visual-reference-engine"
+name = "vre"
 version = "0.1.0"
 description = "Local MCP server that finds, evaluates, presents and stores real visual references for design work."
 requires-python = ">=3.11"
@@ -18,7 +18,7 @@ dependencies = [
 dev = ["pytest>=8.0"]
 
 [project.scripts]
-vre-mcp = "visual_reference.server:main"
+vre-mcp = "vre.server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

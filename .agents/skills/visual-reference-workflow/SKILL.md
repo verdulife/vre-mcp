@@ -1,6 +1,6 @@
 ---
 name: visual-reference-workflow
-description: "Trigger: design references, moodboard, art direction, visual research, referencias visuales. Run the visual-reference MCP workflow: search real references, see the images, present diverse directions, save only what the user picks."
+description: "Trigger: design references, moodboard, art direction, visual research, referencias visuales. Run the vre MCP workflow: search real references, see the images, present diverse directions, save only what the user picks."
 license: MIT
 metadata:
   author: vre-mcp

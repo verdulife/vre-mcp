@@ -12,7 +12,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "src"))
 
-from visual_reference.server import main  # noqa: E402
+from vre.server import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

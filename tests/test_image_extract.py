@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unittest
 
-from visual_reference.discovery.image_extract import extract_image_candidates
+from vre.discovery.image_extract import extract_image_candidates
 
 PAGE = """<html><head>
 <meta property="og:image" content="/media/poster.jpg">
@@ -55,7 +55,7 @@ class ImageExtractionTests(unittest.TestCase):
 
 class NoiseFilterTests(unittest.TestCase):
     def test_site_chrome_is_matched(self):
-        from visual_reference.discovery.orchestrator import NOISE_URL_RE
+        from vre.discovery.orchestrator import NOISE_URL_RE
 
         for url in (
             "https://designlenta.ru/images/logo.png",

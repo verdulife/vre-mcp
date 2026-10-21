@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unittest
 
-from visual_reference.sources.pi_web_access import parse_search_text
+from vre.sources.pi_web_access import parse_search_text
 
 SOURCES_BLOCK = """**Provider:** exa
 
@@ -59,8 +59,8 @@ class ParseSearchTextTests(unittest.TestCase):
 
 class AdapterAvailabilityTests(unittest.TestCase):
     def test_disabled_source_reports_reason_instead_of_results(self):
-        from visual_reference.config import PiWebAccessConfig
-        from visual_reference.sources.pi_web_access import PiWebAccessAdapter
+        from vre.config import PiWebAccessConfig
+        from vre.sources.pi_web_access import PiWebAccessAdapter
 
         adapter = PiWebAccessAdapter(PiWebAccessConfig(enabled=False))
         available, reason = adapter.available()
@@ -68,8 +68,8 @@ class AdapterAvailabilityTests(unittest.TestCase):
         self.assertIn("disabled", reason or "")
 
     def test_missing_server_path_is_reported(self):
-        from visual_reference.config import PiWebAccessConfig
-        from visual_reference.sources.pi_web_access import PiWebAccessAdapter
+        from vre.config import PiWebAccessConfig
+        from vre.sources.pi_web_access import PiWebAccessAdapter
 
         adapter = PiWebAccessAdapter(PiWebAccessConfig(server_path="/definitely/missing/mcp-cli.js"))
         available, reason = adapter.available()

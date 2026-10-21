@@ -10,8 +10,8 @@ import unittest
 
 import httpx
 
-from visual_reference.config import HttpConfig
-from visual_reference.http_safety import (
+from vre.config import HttpConfig
+from vre.http_safety import (
     BlockedURLError,
     FetchError,
     assert_public_http_url,

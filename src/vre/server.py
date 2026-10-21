@@ -53,7 +53,7 @@ Rules the agent must keep:
 - Save only references the user chose or authorized. Do not start the final design unasked.
 """
 
-mcp = FastMCP("visual_reference", instructions=INSTRUCTIONS, log_level="WARNING")
+mcp = FastMCP("vre", instructions=INSTRUCTIONS, log_level="WARNING")
 
 _config: Config | None = None
 _repository: Repository | None = None

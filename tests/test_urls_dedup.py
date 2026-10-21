@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import unittest
 
-from visual_reference.discovery.deduplication import dedupe_candidates
-from visual_reference.urls import dedupe_key, domain_allowed, is_http_url, normalize_url
+from vre.discovery.deduplication import dedupe_candidates
+from vre.urls import dedupe_key, domain_allowed, is_http_url, normalize_url
 from tests.fixtures import make_candidate
 
 

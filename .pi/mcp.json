@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "visual-reference": {
+    "vre": {
       "command": "python",
       "args": ["C:/Users/verdu/vre-mcp/scripts/run_server.py"],
       "cwd": "C:/Users/verdu/vre-mcp",

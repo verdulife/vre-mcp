@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from visual_reference.models import Candidate, ImageInfo
+from vre.models import Candidate, ImageInfo
 
 
 def make_candidate(

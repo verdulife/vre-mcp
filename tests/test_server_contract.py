@@ -9,7 +9,7 @@ from unittest import mock
 
 from mcp.server.fastmcp.exceptions import ToolError
 
-from visual_reference import server
+from vre import server
 
 
 def _isolated_environment(testcase):

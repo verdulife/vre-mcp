@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import unittest
 
-from visual_reference.config import SelectionWeights
-from visual_reference.evaluation.diversity import color_family, distance, select_diverse
-from visual_reference.evaluation.scoring import score_candidate
-from visual_reference.models import SearchOutcome
-from visual_reference.workflow.present import present_session
-from visual_reference.workflow.sessions import SessionStore
+from vre.config import SelectionWeights
+from vre.evaluation.diversity import color_family, distance, select_diverse
+from vre.evaluation.scoring import score_candidate
+from vre.models import SearchOutcome
+from vre.workflow.present import present_session
+from vre.workflow.sessions import SessionStore
 from tests.fixtures import make_candidate
 
 

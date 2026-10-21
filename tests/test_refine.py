@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import unittest
 
-from visual_reference.models import SearchOutcome
-from visual_reference.workflow.refine import plan_refinement, previous_pages
-from visual_reference.workflow.sessions import SessionStore
+from vre.models import SearchOutcome
+from vre.workflow.refine import plan_refinement, previous_pages
+from vre.workflow.sessions import SessionStore
 from tests.fixtures import make_candidate
 
 

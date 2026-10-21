@@ -13,9 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ConfigAssetTests(unittest.TestCase):
     def test_example_config_parses_and_matches_the_loader(self):
-        from visual_reference.config import load_config
+        from vre.config import load_config
 
-        data = tomllib.loads((ROOT / "visual-reference.toml.example").read_text(encoding="utf-8"))
+        data = tomllib.loads((ROOT / "vre.toml.example").read_text(encoding="utf-8"))
         for section in ("search", "vision", "storage", "http", "selection"):
             self.assertIn(section, data)
         config = load_config()
@@ -26,7 +26,7 @@ class ConfigAssetTests(unittest.TestCase):
 
     def test_project_mcp_config_points_at_the_server_script(self):
         payload = json.loads((ROOT / ".pi" / "mcp.json").read_text(encoding="utf-8"))
-        server = payload["mcpServers"]["visual-reference"]
+        server = payload["mcpServers"]["vre"]
         self.assertEqual(server["exposure"], "direct")
         self.assertTrue(Path(server["args"][0]).is_file())
         self.assertIn("scripts", server["args"][0])

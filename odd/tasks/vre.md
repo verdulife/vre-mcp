@@ -107,14 +107,14 @@ L4 (Phase 1 evidence, real run — no mocks):
   capitals, six artist names, "17:00–06:00" and a black/red/white/pink palette. None of that is in
   the metadata ("Brutalist event poster with red text and solid color anchor").
 - Full Pi relay verified with a nested headless session:
-  `pi -p --approve --tools 'read,mcp__visual_reference__*' --no-session "<ask>"`.
+  `pi -p --approve --tools 'read,mcp__vre__*' --no-session "<ask>"`.
   `--approve` grants project trust for that single run (no trust.json write). The nested model
   received the MCP image block and reported literal texts absent from metadata
   ("12 Inch Vinyl Record Grid System", "Bento", "99×210", "Narrow Brochure Grid System").
   Conclusion: Pi 1.3.0 does relay an MCP image block from a *direct* tool declaration to the model.
 - Discovered defects from the real run: a site logo (`designlenta.ru/images/logo.png`) was accepted
   as a candidate image; the log level was noisy on stderr; the `--tools` glob for a server named
-  `visual-reference` must use `mcp__visual_reference__*`.
+  `vre` must use `mcp__vre__*`.
 - Trust note: `pi mcp list` reports `.pi/mcp.json` ignored because the project is not trusted, so a
   normal interactive session must approve project trust once (`--approve` per run, or the prompt).
 
@@ -140,7 +140,17 @@ L6 (T7 close-out):
   measured dimensions; limitation wording did not name the actual reason. No test was weakened.
 - Verified again after those fixes with the live flow: 6 usable candidates, provider `exa`, 4 diverse
   picks, `fetch_reference_image` returning `['text','image']`.
-- Work-unit commits on `feature/visual-reference-engine`; each commit was checked out into a scratch
+- Work-unit commits on `feature/vre`; each commit was checked out into a scratch
   directory from its own tree and its suite run there: all 8 commits green.
 - Unresolved for the human: `.pi/mcp.json` stays ignored until the project is trusted, so a normal
   interactive Pi session must approve trust (or the server must be registered with `pi mcp add`).
+
+L7 (project rename to VRE):
+- Repository name: `vre-mcp` (kept: it is the MCP server project inside `C:/Users/verdu/vre-mcp`).
+- Renamed everywhere: Python package `visual_reference` -> `vre`, distribution `visual-reference-engine` -> `vre`,
+  config file `visual-reference.toml` -> `vre.toml`, MCP server name `visual-reference` -> `vre`,
+  CLI `vre-mcp` (kept), default database `data/vre.sqlite`, branch `feature/visual-reference-engine` -> `feature/vre`.
+- Kept on purpose: the specification file `visual-reference-engine-mvp.md` (the user's source document, unchanged)
+  and the skill name `visual-reference-workflow` (the workflow's name, not the project's).
+- Verified after the rename: 62 tests OK; `scripts/e2e_probe.py` reports `server: vre` with 9 tools and a real
+  image block; a nested Pi session lists `mcp__vre__engine_status` ... `mcp__vre__list_projects`.

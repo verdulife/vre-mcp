@@ -6,9 +6,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from visual_reference.models import SearchOutcome
-from visual_reference.storage import Database, Repository
-from visual_reference.workflow.sessions import SessionStore
+from vre.models import SearchOutcome
+from vre.storage import Database, Repository
+from vre.workflow.sessions import SessionStore
 from tests.fixtures import make_candidate
 
 
