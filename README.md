@@ -113,7 +113,7 @@ credentials.
 | `engine_status` | What is actually available: source state, vision transport, database, limits. |
 | `search_references` | Real search; returns candidates with page URL, verified image URL, dimensions, colours, confidence and status. |
 | `evaluate_references` | 0–5 scores with evidence and explicit limitations (metadata only). |
-| `present_reference_set` | 3–5 deliberately different references with links, measured observations and cautions. |
+| `present_reference_set` | 3–5 deliberately different references with links, measured observations and cautions; **attaches the real images by default** (`attach_images=false` for a metadata-only listing). Images too small to judge (short edge < 240 px or area < 120000 px) are left out and counted. |
 | `refine_search` | `same`, `narrow` or `explore` from the same briefing; drops pages already seen. |
 | `fetch_reference_image` | Returns the real image as an MCP image block (candidate, saved reference or explicit URL). |
 | `save_references` | Stores the chosen references and their compact cards; URLs only, no image copies. |
@@ -179,6 +179,12 @@ python scripts/e2e_persist.py               # save, restart, read, fetch by refe
 After the rename to VRE the same probe and a Pi session confirm the server name and tool prefix:
 `server: vre`, tools `mcp__vre__engine_status` ... `mcp__vre__list_projects`.
 
+`present_reference_set` with a fresh server process (the live session keeps the old server until it
+reconnects): blocks `['text','text','image','text','image','text','image','text','image']` — the JSON
+payload followed by one label and one real image per item, 148/92/36/18 KB. Two candidates were left
+out with the note `2 candidate(s) were left out because the verified image is too small to judge`,
+and every candidate now reports `image_verified: true` plus `image_mime: image/jpeg`.
+
 Full Pi relay, nested headless run with project trust for that run only:
 
 ```bash
@@ -220,10 +226,14 @@ Persistence across processes (`python scripts/e2e_persist.py`):
 5. **Sessions: memory for speed, SQLite for truth.** A session is written to the database on
    creation and rehydrated on demand, so a restarted server answers `evaluate`, `present`,
    `refine` and `fetch` with the same ids.
-6. **Storage of `references_`** (trailing underscore) because `REFERENCES` is a SQL keyword.
+6. **Presentation refuses tiny images.** A verified image is not automatically a useful one: a
+   400×131 site header passed retrieval and verification. The presentation gate requires a short
+   edge of at least 240 px and 120000 px of area, and says how many candidates it left out. The
+   images themselves are attached to the `present_reference_set` result by default.
+7. **Storage of `references_`** (trailing underscore) because `REFERENCES` is a SQL keyword.
    Cards are keyed by page URL, so saving the same page twice updates the card.
-7. **Tests use `unittest`.** No new dependency was added for the test runner.
-8. **The skill lives in `.agents/skills/`**, a location Pi discovers without configuration.
+8. **Tests use `unittest`.** No new dependency was added for the test runner.
+9. **The skill lives at `.agents/skills/vre-workflow/`**, a location Pi discovers without configuration.
 
 ## Known limitations
 

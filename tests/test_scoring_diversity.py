@@ -110,5 +110,39 @@ class DiversityTests(unittest.TestCase):
         self.assertTrue(payload["notes"])
 
 
+class PresentationSizeGateTests(unittest.TestCase):
+    """An image too small to judge is left out instead of being handed to the agent."""
+
+    def test_small_verified_images_are_left_out_with_one_note(self):
+        session = _session(
+            [
+                make_candidate("thin", width=400, height=131, title="Thin banner crop"),
+                make_candidate("flat", width=412, height=241, title="Small card crop"),
+                make_candidate("good", width=1200, height=630, title="Festival poster full bleed"),
+            ]
+        )
+        payload = present_session(session, limit=5, weights=None, present_min=3, present_max=5)
+        presented = [item["candidate_id"] for item in payload["presentation"]]
+        self.assertEqual(presented, ["good"])
+        size_notes = [note for note in payload["notes"] if "were left out" in note]
+        self.assertEqual(len(size_notes), 1)
+        self.assertIn("2 candidate(s)", size_notes[0])
+        self.assertIn("240", size_notes[0])
+        self.assertIn("120000", size_notes[0])
+
+    def test_no_size_note_when_every_image_is_large_enough(self):
+        session = _session([make_candidate("good", width=1200, height=630)])
+        payload = present_session(session, limit=5, weights=None, present_min=3, present_max=5)
+        self.assertFalse(any("were left out" in note for note in payload["notes"]))
+
+    def test_presentation_items_declare_verified_mime(self):
+        session = _session([make_candidate("good", width=1200, height=630)])
+        payload = present_session(session, limit=3, weights=None, present_min=3, present_max=5)
+        item = payload["presentation"][0]
+        self.assertTrue(item["image_verified"])
+        self.assertEqual(item["image_mime"], "image/jpeg")
+        self.assertTrue(item["image_url"].endswith("-image.jpg"))
+
+
 if __name__ == "__main__":
     unittest.main()

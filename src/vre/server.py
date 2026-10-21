@@ -48,8 +48,9 @@ Rules the agent must keep:
   Never describe an image you have not received.
 - Scores from `evaluate_references` come from metadata and measured image properties only.
   Your own visual observation, clearly labelled, outranks them.
-- `present_reference_set` selects for difference, not for ranking. Present its cautions where
-  they matter: a social card may not be the artwork itself.
+- `present_reference_set` selects for difference, not for ranking, and returns the real
+  images of its items after the JSON payload. Present its cautions where they matter: a social
+  card may not be the artwork itself.
 - Save only references the user chose or authorized. Do not start the final design unasked.
 """
 
@@ -290,16 +291,23 @@ async def present_reference_set(
     search_id: str,
     limit: int | None = None,
     include_previous: bool = False,
-) -> str:
+    attach_images: bool = True,
+) -> list:
     """Package a small set of deliberately different references for the conversation.
 
     Selection is greedy MMR-style over measured image properties, so it is not simply the top
     of a ranked list. The payload is data for you to present; the user still decides.
 
+    The call returns the JSON payload first and then, by default, the real image of every item
+    in presentation order, each preceded by a short label line, so you can see the references
+    without a second round trip. Candidates whose verified image is too small to judge are left
+    out and counted in `notes`.
+
     Args:
         search_id: Session returned by `search_references` or `refine_search`.
         limit: How many to present (clamped to the configured 3-5 range).
         include_previous: Set to true to allow candidates already presented in this session.
+        attach_images: Keep true to receive the real images; set false for a cheap metadata-only listing.
     """
     session = _session(search_id)
     config = get_config()
@@ -316,7 +324,43 @@ async def present_reference_set(
         present_max=config.search.present_max,
     )
     get_repository().save_session(session)
-    return _json(payload)
+
+    notes = payload.setdefault("notes", [])
+    vision = config.vision
+    attach = attach_images and bool(payload.get("presentation"))
+    if attach and not vision.enabled:
+        notes.append(
+            "Images were not attached because vision is disabled (`vision.enabled = false`); "
+            "only the metadata above is available."
+        )
+        attach = False
+
+    blocks: list = [_json(payload)]
+    if attach:
+        blocks.extend(await _attachment_blocks(payload["presentation"], config))
+    return blocks
+
+
+async def _attachment_blocks(items: list[dict], config: Config) -> list:
+    """One label line plus one image block per item; a failure stays local to its item."""
+    vision = config.vision
+    blocks: list = []
+    for index, item in enumerate(items, start=1):
+        blocks.append(
+            f"{index}. {item['candidate_id']} | {item['title']} | {item['page_url']}"
+        )
+        url = item.get("image_url")
+        if not url:
+            blocks.append("image_unavailable: this candidate has no verified image URL.")
+            continue
+        try:
+            resource = await fetch_image_bytes(url, config.http, max_bytes=vision.max_image_bytes)
+            data, _mime = prepare_for_model(resource.content, vision)
+        except FetchError as exc:
+            blocks.append(f"image_unavailable: {exc}")
+            continue
+        blocks.append(Image(data=data, format="jpeg"))
+    return blocks
 
 
 @mcp.tool()

@@ -20,8 +20,9 @@ would actually change a decision.
 ## Hard Rules
 
 1. **The images are the evidence.** The MCP server validates that an image exists and decodes, but
-   it cannot see it. Before describing any reference visually, call `fetch_reference_image`.
-   Never describe an image you have not received.
+   it cannot see it. `present_reference_set` returns the real images attached by default; if you
+   switch that off, call `fetch_reference_image`. Never describe an image you have not received,
+   and never paste an `image_url` as a substitute for showing the image.
 2. **Three labels, never mixed.** Separate what the source states (verified fact), what you see in
    the image (visual observation, yours), and what you infer (interpretation). If you did not look,
    say so.
@@ -68,9 +69,16 @@ call `fetch_reference_image(candidate_id=...)`. Look at the pixels first, then w
 
 ### 5. Present
 
+`present_reference_set` returns the metadata payload **and the real images as attachments**
+(`attach_images=true` is the default). Those attached images are the ones you describe. Use
+`attach_images=false` only for a cheap listing you will not describe visually, and then call
+`fetch_reference_image` first.
+
 Per reference: the image, title and source, link to the original page, one concrete contribution,
 one visual decision worth exploring, and any caution (unverified authorship, social card, expiring
 URL, low resolution). Keep it short: the user needs to compare directions, not read a report.
+If the payload says some candidates were left out because the verified image is too small, say so;
+do not describe an image the server refused to attach.
 
 Close with a natural question: choose some, refine, or explore another direction.
 

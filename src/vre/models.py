@@ -58,19 +58,22 @@ class Candidate:
         return self.image.url if self.image else None
 
     def compact(self) -> dict[str, Any]:
+        image = self.image
         data = {
             "candidate_id": self.candidate_id,
             "title": self.title,
             "source": self.source,
             "page_url": self.page_url,
             "image_url": self.image_url,
+            "image_verified": bool(image and image.verified),
+            "image_mime": image.content_type if image else None,
             "creator": self.creator,
             "metadata_confidence": self.metadata_confidence,
             "status": self.status,
             "retrieved_at": self.retrieved_at,
         }
-        if self.image and self.image.verified:
-            data["image_dimensions"] = [self.image.width, self.image.height]
+        if image and image.verified:
+            data["image_dimensions"] = [image.width, image.height]
         if self.snippet:
             data["snippet"] = self.snippet
         if self.exclusion_reason:

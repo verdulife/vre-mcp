@@ -159,3 +159,17 @@ L8 (skill rename, user preference):
 - The skill is now `vre-workflow` at `.agents/skills/vre-workflow/SKILL.md`; README and
   `tests/test_assets.py` follow. `pi mcp list` reports `vre: connected, 9 tools (direct, project)`
   after the user trusted the project and restarted Pi.
+
+L9 (user-reported defect: "it returns the page URL, not the image"):
+- Diagnosis with the real tool: `image_url` already pointed at the image resource and
+  `fetch_reference_image` already returned `['text','image']`. The gap was interaction: images only
+  travelled through that one tool, and an extension-less image endpoint (`/api/og/...`,
+  `/preview?...`) is indistinguishable from a page in JSON.
+- Fixed: `present_reference_set(attach_images=True)` (default) now returns the JSON payload first,
+  then one label text and one real `Image` block per item; `attach_images=False` keeps the cheap
+  listing. Payloads gain `image_verified` and `image_mime`. Presentation refuses images with a short
+  edge < 240 px or area < 120000 px (a 400x131 site header had been presented) and counts them.
+- Verified in a fresh server process: blocks `['text','text','image','text','image','text','image','text','image']`,
+  images 148/92/36/18 KB, note "2 candidate(s) were left out because the verified image is too small to judge".
+  70 offline tests green. The live session needed a server reconnect to load the new code (a
+  long-lived stdio child does not reload on its own).
