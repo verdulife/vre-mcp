@@ -1,6 +1,6 @@
 # Descomposición de referencia — «Improve, all ways.»
 
-- **Referencia**: `ref` pendiente de guardar · candidato `cand_59e7499ad06f`
+- **Referencia guardada**: `ref_bd57832e6b` (elegida por el usuario) · candidato `cand_59e7499ad06f`
 - **Origen**: https://www.blushpublishing.co.uk/blog/3800-embossed-business-cards
 - **Imagen analizada**: `https://images.squarespace-cdn.com/content/615afc37a1a29b0da532c7c7/1726587410831-S44RD9AL3XZLXSDBOA6K/20240913-IMG_0793.jpg?format=1500w&content-type=image%2Fjpeg`
 - **Archivo local**: `data/references/tarjetas-visita-mcp/04-blind-embossed-letterpress-printed-busin.jpg`

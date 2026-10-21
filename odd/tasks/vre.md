@@ -204,3 +204,12 @@ L12 (rebuild handoff):
   for the blind-embossed "Improve, all ways." card (FigCraft frame 1004x650 px, inner-shadow emboss
   approximation, explicit missing data).
 - README documents the step; asset test asserts the contract keywords.
+
+L13 (user chose and asked to save + proceed):
+- Saved the chosen reference: `ref_bd57832e6b` in project `proj_55d6337422` ("VRE — Tarjetas de visita
+  estudio"), with `why_selected` stating it was the user's choice, plus problem/method/lesson/cautions
+  from my own observation (`analysis_origin: model_observation`).
+- `02-improve-all-ways-decomposition.md` now points at that reference id.
+- Added `01-polly-james-decomposition.md` for comparison, same schema, including an explicit
+  comparison table and a labelled recommendation (hybrid: logo deboss on the front, role line on the back).
+- No code change; 82 tests unaffected.
