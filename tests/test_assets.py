@@ -56,6 +56,10 @@ class SkillAssetTests(unittest.TestCase):
             "refine_search",
             "get_project_references",
             "costs the user time",
+            "decomposition document",
+            "[OBS]",
+            "[MISSING]",
+            "never the mockup",
         ]
         lowered = self.text.lower()
         for needle in required:

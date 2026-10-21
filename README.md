@@ -121,6 +121,18 @@ credentials.
 | `save_reference_images` | Writes the original image bytes of chosen candidates or saved references into `data/references/<folder>/`, keeps a merging `index.json`, and returns absolute paths plus the direct image URLs. Refuses unsafe folder names; one failing image does not abort the rest. |
 | `list_projects` | Local projects with reference counts. |
 
+## Rebuilding a chosen reference
+
+Choosing a reference is not yet designing from it. The skill requires a **decomposition document**
+before any rebuild (FigCraft, Figma, code or print): what the piece is, what is artifact versus
+mockup context (scene, props, shadows and camera are discarded), geometry, composition, typography,
+colour and finish, what the image cannot tell, and a concrete plan for the target tool. Every claim
+carries `[OBS]` (observed), `[INF]` (inference) or `[MISSING]`.
+
+An example produced from a real VRE candidate lives at
+`docs/references/tarjetas-visita/02-improve-all-ways-decomposition.md`. The MCP server cannot write
+it — it never sees the image — so the document is the agent's work, guided by the skill.
+
 ## Presentation contract
 
 Every reference answer ends with one Markdown table, exactly three columns, and `present_reference_set`

@@ -193,3 +193,14 @@ L11 (presentation format defect: user asked for one table, always):
 - Skill and README state the contract: always close with that table, first column a clickable link,
   description with the linked title, valuation as n/5 plus one reason, agent judgement labelled.
 - 82 offline tests green, including the new table-row test.
+
+L12 (rebuild handoff):
+- The user chose a reference and wants to recreate it in FigCraft. The correct handoff is a
+  decomposition document written by the agent that saw the image, not by the server.
+- Added skill section "Rebuilding a chosen reference": required sections, `[OBS]`/`[INF]`/`[MISSING]`
+  labels, discard mockup context, never state a font/hex/mm as fact, map to screen-tool primitives and
+  say that a screen effect approximates print.
+- Produced a real example: `docs/references/tarjetas-visita/02-improve-all-ways-decomposition.md`
+  for the blind-embossed "Improve, all ways." card (FigCraft frame 1004x650 px, inner-shadow emboss
+  approximation, explicit missing data).
+- README documents the step; asset test asserts the contract keywords.

@@ -124,6 +124,31 @@ problem, method, transferable_lesson, cautions}])`. `why_selected` must reflect 
 when you know it; label your own analysis as yours. In later sessions use `get_project_references`
 for the compact cards, and fetch an image again only when the current decision needs it.
 
+### 7b. Rebuilding a chosen reference
+
+When the user picks a reference and wants to recreate it (in FigCraft, Figma, code, or print), do
+not jump to the design. First produce a **decomposition document** and save it next to the reference.
+
+The server cannot write it: it verifies provenance but never sees the image. You saw it, so you write
+it, and you keep three labels apart throughout:
+
+- **[OBS]** observed in the image,
+- **[INF]** your inference,
+- **[MISSING]** what the image cannot tell (exact font, real stock colour, reverse side, print specs).
+
+Required sections: what the piece is; **artifact vs. context** (what to keep, what to discard: scene,
+props, background, shadows, camera angle, dust); geometry and proportion; composition and grid;
+typography (class, case, weight, tracking, relative size, exact family only if certain); colour
+(values are the photo's, not the material's); finish and materials; what is missing; a concrete
+rebuild plan for the target tool; and a fidelity checklist.
+
+Rules:
+- Recreate the artifact, never the mockup. A card photographed on orange paper is a card, not orange.
+- Never present a font name, hex value or millimetre as fact unless it is verifiable. Give candidates
+  and ranges, labelled.
+- For screen tools, map to their primitives (frames, auto layout, components, variables, effects) and
+  say plainly that a screen effect approximates a print finish and cannot replace it.
+
 ## Failure Handling
 
 - Source error or timeout: say what failed and from which source; continue only if another enabled
