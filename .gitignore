@@ -1,0 +1,25 @@
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Secretos y configuración local
+.env
+*.local.*
+
+# Logs y cachés
+*.log
+.cache/
+__pycache__/
+.pytest_cache/
+node_modules/
+
+# Datos locales de ejecución
+data/
+
+# Imágenes de prueba descargadas (material de terceros: no se versiona)
+search-test/*.jpg
+search-test/*.jpeg
+search-test/*.png
+search-test/*.webp

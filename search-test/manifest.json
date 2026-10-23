@@ -1,0 +1,134 @@
+{
+  "wanted": 5,
+  "kept": [
+    {
+      "file": "01-overmind-design-disco-futurista-1989.png",
+      "source": "overmind.design",
+      "page": "https://overmind.design/DISCO-FUTURISTA-1989",
+      "image_url": "https://freight.cargo.site/w/1200/i/Z1730643029554616437742424122826/Disco-Futurista-1989.png",
+      "width": 1200,
+      "height": 1698,
+      "format": "PNG",
+      "bytes": 2190687
+    },
+    {
+      "file": "02-fontsinuse-com-forms-at-fabric-poster-series-2019.jpg",
+      "source": "fontsinuse.com",
+      "page": "https://fontsinuse.com/uses/26269/forms-at-fabric-poster-series-2019",
+      "image_url": "https://cards.fontsinuse.com/cardshot?s=twitter&t=use&url=https://fontsinuse.com/uses/26269/forms-at-fabric-poster-series-2019&k=d672979bad137beaab5d9faeff71e460&v=fccbfa5f",
+      "width": 1760,
+      "height": 880,
+      "format": "JPEG",
+      "bytes": 77280
+    },
+    {
+      "file": "03-vasa-works-31257698314c82dc721de680f7944b9b.png",
+      "source": "vasa.works",
+      "page": "https://inspiration.vasa.works/item/branding/31257698314c82dc721de680f7944b9b",
+      "image_url": "https://inspiration.vasa.works/api/og/item/branding%2F31257698314c82dc721de680f7944b9b",
+      "width": 1200,
+      "height": 630,
+      "format": "PNG",
+      "bytes": 189923
+    },
+    {
+      "file": "04-andrealiang-com-poster-design-silent-disco-event.png",
+      "source": "andrealiang.com",
+      "page": "https://andrealiang.com/poster-design-silent-disco-event",
+      "image_url": "https://cdn.myportfolio.com/4682c0a4-74a2-4ddf-9d02-c9201cfad7ce/657ef1ba-5e22-4232-a7b7-c1059fa023d4_rwc_0x0x903x904x903.png?h=0afbb2c79a81ee7d3539f529176baa81",
+      "width": 903,
+      "height": 904,
+      "format": "PNG",
+      "bytes": 30834
+    },
+    {
+      "file": "05-chkdesign-com-disco-freaks.jpg",
+      "source": "chkdesign.com",
+      "page": "https://chkdesign.com/work/disco-freaks",
+      "image_url": "https://chkdesign.com/media/pages/work/disco-freaks/dee5b01bcd-1667221764/disco-freaks-01-q80.jpg",
+      "width": 1925,
+      "height": 1284,
+      "format": "JPEG",
+      "bytes": 205793
+    }
+  ],
+  "pages": [
+    {
+      "source": "overmind.design",
+      "page": "https://overmind.design/DISCO-FUTURISTA-1989",
+      "page_status": 200,
+      "declared_images": 1,
+      "result": "used"
+    },
+    {
+      "source": "fontsinuse.com",
+      "page": "https://fontsinuse.com/uses/26269/forms-at-fabric-poster-series-2019",
+      "page_status": 200,
+      "declared_images": 5,
+      "result": "used"
+    },
+    {
+      "source": "vasa.works",
+      "page": "https://inspiration.vasa.works/item/branding/31257698314c82dc721de680f7944b9b",
+      "page_status": 200,
+      "declared_images": 5,
+      "result": "used"
+    },
+    {
+      "source": "dribbble.com",
+      "page": "https://dribbble.com/shots/2459008-Typography-Music-Event-Party-Flyers-2",
+      "page_status": 202,
+      "result": "page-rejected"
+    },
+    {
+      "source": "dribbble.com",
+      "page": "https://dribbble.com/shots/1905950-80s-Night",
+      "page_status": 202,
+      "result": "page-rejected"
+    },
+    {
+      "source": "dribbble.com",
+      "page": "https://dribbble.com/shots/25359103-Ladies-Night-club-poster-design",
+      "page_status": 202,
+      "result": "page-rejected"
+    },
+    {
+      "source": "andrealiang.com",
+      "page": "https://andrealiang.com/poster-design-silent-disco-event",
+      "page_status": 200,
+      "declared_images": 3,
+      "result": "used"
+    },
+    {
+      "source": "otaviosantiago.com",
+      "page": "https://www.otaviosantiago.com/berghain",
+      "page_status": 200,
+      "declared_images": 5,
+      "image_errors": [
+        "https://static.wixstatic.com/media/1ab39b_bedce45bc95243918fb0db9fdbbe6b11~mv2.jpg/v1/fill/w_2000,h_380,al_c/1ab39b_bedce45bc95243918fb0db9fdbbe6b11~mv2.jpg -> rejected {'width': 2000, 'height': 380, 'format': 'JPEG'}",
+        "https://static.wixstatic.com/media/1ab39b_bedce45bc95243918fb0db9fdbbe6b11~mv2.jpg/v1/fill/w_910,h_173,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/1ab39b_bedce45bc95243918fb0db9fdbbe6b11~mv2.jpg -> rejected {'width': 910, 'height': 173, 'format': 'JPEG'}",
+        "https://static.wixstatic.com/media/1ab39b_645723fb068e4ac09d89645a2d473e0b~mv2.jpg/v1/fill/w_910,h_173,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/1ab39b_645723fb068e4ac09d89645a2d473e0b~mv2.jpg -> rejected {'width': 910, 'height': 173, 'format': 'JPEG'}"
+      ],
+      "result": "no-usable-image"
+    },
+    {
+      "source": "behance.net",
+      "page": "https://www.behance.net/gallery/191202029/TECHNO-SYNCHRO",
+      "page_status": 403,
+      "result": "page-rejected"
+    },
+    {
+      "source": "behance.net",
+      "page": "https://www.behance.net/gallery/86233799/RAVE-CLUB-Poster-series",
+      "page_status": 403,
+      "result": "page-rejected"
+    },
+    {
+      "source": "chkdesign.com",
+      "page": "https://chkdesign.com/work/disco-freaks",
+      "page_status": 200,
+      "declared_images": 4,
+      "result": "used"
+    }
+  ]
+}
