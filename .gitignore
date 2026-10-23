@@ -23,3 +23,6 @@ search-test/*.jpg
 search-test/*.jpeg
 search-test/*.png
 search-test/*.webp
+
+# Engram: base de datos local de trabajo (los chunks sí se versionan)
+.engram/engram.db
