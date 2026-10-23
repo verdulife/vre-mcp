@@ -15,6 +15,11 @@ el siguiente paso. Un hito no lo cierro yo.
 - Reconstrucción desde cero. La implementación anterior se borró del árbol de trabajo el 23/10/26;
   su historia vive en la rama `feature/vre` (commit `57a9bbb`) y se consulta con
   `git show feature/vre:<ruta>`, `git grep <patrón> feature/vre` o un `git worktree`.
+- **Archivo congelado:** `feature/vre` está publicada en `origin`. No recibe cambios, el rebuild no
+  la extiende y no es la rama por defecto (`from-zero` lo es). Existe para que "reconstruido desde
+  cero" sea verificable y para conservar la especificación original
+  (`visual-reference-engine-mvp.md`), las descomposiciones de referencias y los tests antiguos.
+  Sus commits están firmados con `verdu@local`, así que no se vinculan a la cuenta de GitHub.
 - Núcleo mínimo, en este orden: **buscar** referencias reales → **ver** la imagen → **guardar** lo
   elegido. Todo lo demás se añade cuando un hito lo necesite.
 
